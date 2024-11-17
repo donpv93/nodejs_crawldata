@@ -1,0 +1,23 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+node_modules
+
+*/.log
+**/*.log
+*.log
+*/uploads/*
+*/*.log
+*.mp3
+*/logs*
+/test/*
+/*.log
+*/node_modules/*
+node_modules/*
+uploads/*
+logs/*
+/.idea
+/.vscode
+.env
