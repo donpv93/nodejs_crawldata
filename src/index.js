@@ -46,12 +46,19 @@ const crawl = async (url) => {
 }
 
 const crawlStories = (async () => {
-    const category = await Category.find({});
+    const category = await Category.find({isCrawled: false});
     console.log('Category: ', category.length);
     const lenghCategory = category.length;
 
     for (let j = 0; j < lenghCategory; j++) {
         const url = category[j].link; // URL trang mục tiêu
+        const isCrawled = category[j].isCrawled;
+
+        if (isCrawled) {
+            console.log(`Category ${url} has already been crawled.`);
+            continue;
+        }
+
         const responsePage = await axios.get(url, proxy);
         const _$ = cheerio.load(responsePage.data);
 
@@ -76,8 +83,6 @@ const crawlStories = (async () => {
         for (let i = 1; i < lastPage; i++) {
             const response = await axios.get(`${url}/${i}`, proxy);
             const $ = cheerio.load(response.data);
-            //logger.info('Crawling data from: ', response.data);
-            const stories = [];
 
             $('li.story-list').each(async (index, element) => {
                 const story = $(element);
@@ -99,11 +104,17 @@ const crawlStories = (async () => {
                         { upsert: true, new: true } // Tạo mới nếu không tồn tại, trả về tài liệu mới nhất
                     );
                 }
+                logger.info('Stories ID: ', categoryId._id);
             });
-            logger.info('Stories: ', stories);
-            await delay(5000);
+            logger.info('Number page: ', i);
+            await delay(2000);
         }
-        await delay(10000);
+
+        // Update category status to isCrawled = true
+        await Category.updateOne({ _id: categoryId._id }, { isCrawled: true });
+        console.log(`Category ${url} has been crawled and updated.`);
+
+        await delay(5000);
     }
 
 

@@ -11,6 +11,14 @@ const categorySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    isCrawled: {
+        type: Boolean,
+        default: false,
+    },
+    isVip: {
+        type: Boolean,
+        default: false,
+    },
     created_at: {
         type: Date,
         default: Date.now,

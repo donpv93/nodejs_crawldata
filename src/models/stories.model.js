@@ -22,6 +22,20 @@ const storySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    viewer: {
+        type: Number,
+        default: 0,
+    },
+    hastag: {
+        type: String,
+    },
+    description: {
+        type: String,
+    },
+    isCompleted: {
+        type: Boolean,
+        default: false,
+    },
     created_at: {
         type: Date,
         default: Date.now,
